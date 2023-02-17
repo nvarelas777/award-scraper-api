@@ -1,0 +1,27 @@
+name: deploy to lambda
+on: [push]
+jobs:
+  deploy_source:
+    name: build and deploy lambda
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: aws-actions/setup-sam@v2
+      - name: Configure AWS Creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+      - run: sam build --use-container
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name test-stack --resolve-s3 --capabilities CAPABILITY_IAM
+      # - name: npm install and build
+      #   run: |
+      #     npm ci
+      #   env:
+      #     CI: true
+      # - name: deploy
+      #   run: |
+      #     zip -j deploy.zip ./*
+      #     aws lambda update-function-code --function-name=github-actions-lambda --zip-file=fileb://deploy.zip
