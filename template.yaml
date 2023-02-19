@@ -10,11 +10,6 @@ Globals:
   Function:
     Timeout: 3
 
-Parameters:
-  ConnectionParam:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: AwardScraperDBConnectionString
-
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -22,7 +17,7 @@ Resources:
       Environment:
         Variables:
           TestVariable: test-123
-          ConnectionString: !Ref ConnectionParam
+          ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
       CodeUri: hello-world/
       Handler: app.lambdaHandler
       Runtime: nodejs18.x
