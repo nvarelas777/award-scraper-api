@@ -9,6 +9,13 @@ Description: >
 Globals:
   Function:
     Timeout: 3
+    Runtime: nodejs18.x
+    VpcConfig:
+      SecurityGroupIds:
+        - "{{resolve:ssm:VPCSecurityGroupId}}"
+      SubnetIds:
+        - "{{resolve:ssm:VPCSubnet1}}"
+        - "{{resolve:ssm:VPCSubnet2}}"
 
 Resources:
   HelloWorldFunction:
@@ -19,7 +26,6 @@ Resources:
           ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
       CodeUri: hello-world/
       Handler: app.lambdaHandler
-      Runtime: nodejs18.x
       Architectures:
         - x86_64
       Events:
@@ -36,7 +42,6 @@ Resources:
           ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
       CodeUri: src/
       Handler: index.lambdaHandler
-      Runtime: nodejs18.x
       Architectures:
         - x86_64
       Events:
