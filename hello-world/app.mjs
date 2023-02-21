@@ -12,8 +12,8 @@
  */
 import { testMethod } from "./service.mjs";
 export const lambdaHandler = async (event, context) => {
-  console.log(event["queryStringParameters"]);
-  console.log(context);
+  console.log(process.env.test);
+  console.log(process.env.ConnectionString);
   try {
     return {
       statusCode: 200,

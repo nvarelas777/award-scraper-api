@@ -1,6 +1,6 @@
 import pkg from "pg";
 const { Client } = pkg;
-const connectionString = "";
+const connectionString = process.env.ConnectionString;
 
 export const lambdaHandler = async (event, context) => {
   if (!event.queryStringParameters?.foo) {
@@ -12,18 +12,17 @@ export const lambdaHandler = async (event, context) => {
     };
   }
   try {
-    // const client = new Client(connectionString);
-    // await client.connect();
-    // var result = await client.query("select * from testtable t");
-    // result.rows.forEach((x) => {
-    //   console.log(x);
-    // });
-    // //console.log(result);
-    // await client.end();
+    const client = new Client(connectionString);
+    await client.connect();
+    var result = await client.query("select * from testtable t");
+    result.rows.forEach((x) => {
+      console.log(x);
+    });
+    await client.end();
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "hello world432423423",
+        message: result.rows,
       }),
     };
   } catch (err) {

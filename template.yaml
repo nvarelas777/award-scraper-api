@@ -16,7 +16,6 @@ Resources:
     Properties:
       Environment:
         Variables:
-          TestVariable: test-123
           ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
       CodeUri: hello-world/
       Handler: app.lambdaHandler
@@ -32,6 +31,9 @@ Resources:
   HelloWorldFunction2:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Environment:
+        Variables:
+          ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
       CodeUri: src/
       Handler: index.lambdaHandler
       Runtime: nodejs18.x
