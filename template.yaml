@@ -16,40 +16,50 @@ Globals:
       SubnetIds:
         - "{{resolve:ssm:VPCSubnet1}}"
         - "{{resolve:ssm:VPCSubnet2}}"
+    Environment:
+      Variables:
+        ConnectiongString: "{{resolve:ssm:AwardScraperConnString}}"
+    Architectures:
+      - x86_64
 
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      Environment:
-        Variables:
-          ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
       CodeUri: hello-world/
       Handler: app.lambdaHandler
-      Architectures:
-        - x86_64
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /hello
             Method: get
+
   HelloWorldFunction2:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      Environment:
-        Variables:
-          ConnectionString: "{{resolve:ssm:AwardScraperConnString}}"
+      Timeout: 45
       CodeUri: src/
       Handler: index.lambdaHandler
-      Architectures:
-        - x86_64
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /route
             Method: get
+      Layers: 
+        - !Ref SharedDependencies
+
+  SharedDependencies:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: SharedDependency
+      ContentUri: shared-packages/
+      CompatibleRuntimes:
+        - nodejs18.x
+      RetentionPolicy: Retain
+    Metadata:
+      BuildMethod: nodejs18.x
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -1,0 +1,15 @@
+{
+  "name": "shared-packages",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sparticuz/chromium": "^111.0.0",
+    "puppeteer-core": "^19.7.2"
+  }
+}
